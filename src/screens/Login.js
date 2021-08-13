@@ -1,18 +1,27 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { StyleSheet, Text, Image, TouchableOpacity, View } from 'react-native';
 import Icon from 'react-native-vector-icons/AntDesign';
 
-import Input from '@src/components/Input';
-import Button from '@src/components/Button';
+import {Input, Button} from '@src/components';
+
+import AuthAPI from '@src/api/AuthAPI';
 
 export default function Login(props) {
+
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
 
     const onSignupPress = () => {
         props.navigation.navigate('SignUp');
     }
 
     const onLoginPress = () => {
-        console.log("Login pressed !!!");
+        const model = {
+            email: email,
+            password: password
+        };
+        console.log(model);
+        AuthAPI.SignIn(model).then(data => console.log("data form SignIn = ", data));
     }
 
     return (
@@ -25,12 +34,12 @@ export default function Login(props) {
             <View style={styles.loginContainer}>
                 <View style={styles.usernameContainer}>
                     <Icon name="user" size={30} color="#FF4C29" />
-                    <Input style={{width: "80%"}} placeholder="Username"/>
+                    <Input style={{width: "80%"}} placeholder="Email" value={email} onChangeText={setEmail}/>
                 </View>
 
                 <View style={styles.passwordContainer}>
                     <Icon name="lock" size={30} color="#FF4C29" />
-                    <Input style={{width: "80%"}} secureTextEntry={true} placeholder="Password"/>
+                    <Input style={{width: "80%"}} secureTextEntry={true} placeholder="Password" value={password} onChangeText={setPassword}/>
                 </View>
 
                 <View style={styles.loginButtonContainer}>

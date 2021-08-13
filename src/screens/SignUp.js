@@ -3,8 +3,9 @@ import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Icon from 'react-native-vector-icons/AntDesign';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
-import Input from '@src/components/Input';
-import Button from '@src/components/Button';
+import {Input, Button} from '@src/components';
+
+import AuthAPI from '@src/api/AuthAPI';
 
 export default function SignUp(props) {
 
@@ -28,7 +29,13 @@ export default function SignUp(props) {
     }
 
     const onRegister = () => {
-        
+        const model = {
+            username: name,
+            email: email,
+            password: password
+        }
+
+        AuthAPI.SignUp(model).then(result => console.log("result = ", result));
     }
 
 
