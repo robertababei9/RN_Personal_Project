@@ -1,6 +1,9 @@
 import React, { useState } from 'react'
+import { useDispatch } from 'react-redux';
 import { StyleSheet, Text, Image, TouchableOpacity, View } from 'react-native';
 import Icon from 'react-native-vector-icons/AntDesign';
+
+import { setUser } from '@src/redux/actions/auth.action';
 
 import {Input, Button} from '@src/components';
 
@@ -10,6 +13,8 @@ export default function Login(props) {
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+
+    const dispatch = useDispatch();
 
     const onSignupPress = () => {
         props.navigation.navigate('SignUp');
@@ -21,7 +26,9 @@ export default function Login(props) {
             password: password
         };
         
-        AuthAPI.SignIn(model).then(data => console.log("data form SignIn = ", data));
+        AuthAPI.SignIn(model).then(data => {
+            data != null && dispatch(setUser(data));
+        });
     }
 
     return (

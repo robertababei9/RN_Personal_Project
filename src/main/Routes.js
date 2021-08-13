@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NavigationContainer } from '@react-navigation/native';
+import { useSelector } from 'react-redux';
 
 import Splash from '@src/screens/Splash';
 
@@ -16,21 +17,33 @@ export default function Routes() {
   const [isSignedIn , setIsSignedIn ] = useState(false)
   const [user, setUser] = useState(null);
 
-  // mock API call to get user ( if logged in )
+  const authReducer = useSelector(state => state.authReducer);
+  
   useEffect(() => {
-    setTimeout(() => {
-        setIsSignedIn(false);
-        setUser({"name": "Robert", "email": "robert.ababei9@gmail.com"});
-    }, 3000);
-  }, []);
+      console.log(authReducer);
+      if (authReducer.user != null) {
+        setIsSignedIn(true);
+      }
+      else {
+          setIsSignedIn(false);
+      }
+  }, [authReducer.user])
 
-    if (!user) {
-        return (
-            <React.Fragment>
-                <Splash />
-            </React.Fragment>
-        )
-    }
+//   // mock API call to get user ( if logged in )
+//   useEffect(() => {
+//     setTimeout(() => {
+//         setIsSignedIn(false);
+//         setUser({"name": "Robert", "email": "robert.ababei9@gmail.com"});
+//     }, 3000);
+//   }, []);
+
+//     if (!user) {
+//         return (
+//             <React.Fragment>
+//                 <Splash />
+//             </React.Fragment>
+//         )
+//     }
 
     return (
         <NavigationContainer>
