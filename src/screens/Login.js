@@ -20,7 +20,7 @@ export default function Login(props) {
             email: email,
             password: password
         };
-        console.log(model);
+        
         AuthAPI.SignIn(model).then(data => console.log("data form SignIn = ", data));
     }
 
