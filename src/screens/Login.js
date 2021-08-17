@@ -1,6 +1,8 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useDispatch } from 'react-redux';
 import { StyleSheet, Text, Image, TouchableOpacity, View } from 'react-native';
+import CheckBox from '@react-native-community/checkbox';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import Icon from 'react-native-vector-icons/AntDesign';
 
 import { setUser } from '@src/redux/actions/auth.action';
@@ -9,18 +11,38 @@ import {Input, Button} from '@src/components';
 
 import AuthAPI from '@src/api/AuthAPI';
 
+const REMEMBER_ME_KEY = "@rememberMe";
+
+
 export default function Login(props) {
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [rememberMe, setRememberMe] = useState(false);
 
     const dispatch = useDispatch();
+
+    // retrieve email & pass from AsyncStorage
+    useEffect(async () => {
+        try {
+            const jsonValue = await AsyncStorage.getItem(REMEMBER_ME_KEY);
+            if (jsonValue != null) {
+                
+                const value = JSON.parse(jsonValue);
+                setEmail(value.email);
+                setPassword(value.password);
+                setRememberMe(true);
+            }
+        } catch (e) {
+            console.log("Login: ", e);
+        }
+    }, []);
 
     const onSignupPress = () => {
         props.navigation.navigate('SignUp');
     }
 
-    const onLoginPress = () => {
+    const onLoginPress = async () => {
         const model = {
             email: email,
             password: password
@@ -29,6 +51,25 @@ export default function Login(props) {
         AuthAPI.SignIn(model).then(data => {
             data != null && dispatch(setUser(data));
         });
+
+        if (rememberMe) {
+            try {
+                const model = JSON.stringify({
+                    email: email,
+                    password: password
+                });
+                await AsyncStorage.setItem(REMEMBER_ME_KEY, model);
+            } catch (e) {
+                console.log("Login: " + e);
+            }
+        }
+        else {
+            try {
+                await AsyncStorage.removeItem(REMEMBER_ME_KEY);
+            } catch (e) {
+                // errors
+            }
+        }
     }
 
     return (
@@ -49,9 +90,24 @@ export default function Login(props) {
                     <Input style={{width: "80%"}} secureTextEntry={true} placeholder="Password" value={password} onChangeText={setPassword}/>
                 </View>
 
+                <View style={styles.rememberMeContainer}>
+                    <CheckBox 
+                        style={styles.rememberMeCheckBox} 
+                        value={rememberMe} 
+                        onValueChange={setRememberMe} 
+                        tintColors={{
+                            true: "#FF4C29",
+                            false: "#FF4C29"
+                        }} // android
+                        tintColor="#FF4C29" // iOS
+                        onCheckColor="#FF4C29" // iOS
+                    />
+                    <Text>Remember me </Text>
+                </View>
+
                 <View style={styles.loginButtonContainer}>
 
-                    <Button style={styles.loginButton} title="Login" onPress={onLoginPress}/>
+                    <Button style={styles.loginButton} title="Login" onPress={onLoginPress} disabled={!email || !password}/>
 
                     <View style={styles.signupContainer}>
                         <Text>Don't have an account ? </Text>
@@ -97,6 +153,16 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         justifyContent: "space-between",
         alignItems: "center",
+    },
+    rememberMeContainer: {
+        width: "100%",
+        flexDirection: "row",
+        justifyContent: "flex-start",
+        alignItems: "center",
+        marginTop: 10
+    },
+    rememberMeCheckBox: {
+        marginRight: 12
     },
     loginButtonContainer: {
         width: "100%",

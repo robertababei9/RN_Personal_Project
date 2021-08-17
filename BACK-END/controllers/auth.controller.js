@@ -55,7 +55,25 @@ exports.signup = (req, res) => {
               return;
             }
   
-            res.send({ message: "User was registered successfully!" });
+            // res.send({ message: "User was registered successfully!" });
+
+              var token = jwt.sign({ id: user._id }, config.secret, {
+                expiresIn: 86400 // 24 hours
+              });
+
+              const userModel = {
+                id: user._id,
+                username: user.username,
+                email: user.email,
+                accessToken: token
+              };
+
+              const result = {
+                success: true,
+                body: userModel
+              };
+              
+              res.send(result);
           });
         });
       }

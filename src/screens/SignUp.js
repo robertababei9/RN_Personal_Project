@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from 'react'
+import { useDispatch } from 'react-redux';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Icon from 'react-native-vector-icons/AntDesign';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+
+import { setUser } from '@src/redux/actions/auth.action';
 
 import {Input, Button} from '@src/components';
 
@@ -15,6 +18,8 @@ export default function SignUp(props) {
     const [confirmPassword, setConfirmPassword] = useState("");
 
     const [buttonDisabled, setButtonDisabled] = useState(true);
+
+    const dispatch = useDispatch();
 
     useEffect(() => {
         if (name != "" && email != "" && password != "" && confirmPassword != "" && password == confirmPassword)
@@ -35,7 +40,11 @@ export default function SignUp(props) {
             password: password
         }
 
-        AuthAPI.SignUp(model).then(result => console.log("result = ", result));
+        AuthAPI.SignUp(model).then(result => {
+            if (result && result.success == true) {
+                dispatch(setUser(result.body));
+            }
+        });
     }
 
 

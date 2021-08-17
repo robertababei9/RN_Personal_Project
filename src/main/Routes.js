@@ -20,7 +20,6 @@ export default function Routes() {
   const authReducer = useSelector(state => state.authReducer);
   
   useEffect(() => {
-      console.log(authReducer);
       if (authReducer.user != null) {
         setIsSignedIn(true);
       }
