@@ -1,12 +1,14 @@
 import React, {useState, useEffect} from 'react'
 import { StyleSheet, Text, View } from 'react-native'
+
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NavigationContainer } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
 
 import Splash from '@src/screens/Splash';
+import BottomNavigator from './BottomNavigator';
 
-import Home from '@src/screens/Home';
+
 import Login from '@src/screens/Login';
 import SignUp from '@src/screens/SignUp';
 
@@ -28,14 +30,6 @@ export default function Routes() {
       }
   }, [authReducer.user])
 
-//   // mock API call to get user ( if logged in )
-//   useEffect(() => {
-//     setTimeout(() => {
-//         setIsSignedIn(false);
-//         setUser({"name": "Robert", "email": "robert.ababei9@gmail.com"});
-//     }, 3000);
-//   }, []);
-
 //     if (!user) {
 //         return (
 //             <React.Fragment>
@@ -48,9 +42,7 @@ export default function Routes() {
         <NavigationContainer>
             {
                 isSignedIn ? (
-                    <Stack.Navigator>
-                        <Stack.Screen name="Home" component={Home} />
-                    </Stack.Navigator>
+                    <BottomNavigator />
                 ) : (
                     <Stack.Navigator initialRouteName="SignIn">
                         <Stack.Screen options={{headerShown: false}} name="SignIn" component={Login} />
