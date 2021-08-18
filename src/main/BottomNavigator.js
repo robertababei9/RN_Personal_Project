@@ -24,7 +24,8 @@ export default function BottomNavigator() {
                 options={{
                     tabBarIcon: (({color, size}) => (
                         <Icon name="home" size={size} color={color} />
-                    ))
+                    )),
+                    headerShown: false
                 }}
             />
             <BottomTabNav.Screen 
