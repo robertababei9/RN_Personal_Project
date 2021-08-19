@@ -1,9 +1,12 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, ImageBackground } from 'react-native';
 import { useDispatch } from 'react-redux';
 import { setUser } from '@src/redux/actions/auth.action';
 
 import { Button } from '@src/components';
+import ProfileCard from './ChangeColorsCard';
+
+const BACKGROUND_IMAGE = require("@src/assets/images/profile_background.jpg");
 
 export default function Profile() {
 
@@ -14,11 +17,15 @@ export default function Profile() {
     }
 
     return (
-        <View style={styles.container}>
-            <Text>Profile screen</Text>
+        <ImageBackground style={styles.container} >
+
+            <ProfileCard 
+                title="Change app colors"
+            />
+
             <Button style={styles.button} title="Log out" onPress={handleLogout}/>
 
-        </View>
+        </ImageBackground>
     )
 }
 

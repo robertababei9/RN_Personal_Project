@@ -75,8 +75,10 @@ export default function Login(props) {
     return (
         <View style={styles.container}>
             <View style={styles.headerContainer}>
-                {/* <Image source={require('@src/assets/images/test_logo.png')}/> */}
-                <Text>Logo</Text>
+                <Image style={{
+                    flex: 1,
+                }} source={require('@src/assets/images/login_image.jpg')} resizeMode="cover"/>
+                {/* <Text>Logo</Text> */}
             </View>
 
             <View style={styles.loginContainer}>
@@ -128,7 +130,7 @@ const styles = StyleSheet.create({
         width: "100%"
     },
     headerContainer: {
-        backgroundColor: "orange",
+        // backgroundColor: "orange",
         flex: 4,
         justifyContent: "center",
         alignItems: "center",

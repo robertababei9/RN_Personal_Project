@@ -1,87 +1,119 @@
 
 export const categories = [
     {
-        id: "1",
-        name: "Food",
-        icon: "local-restaurant",
-        description: "Rent a cook, delivery boy",
-        totalItems: 125
+        title: "Pizza",
+        data: [
+            {
+                name: "Pizza 1",
+                description: "Description for this product"
+            },
+            {
+                name: "Pizza 2",
+                description: "Description for this product, but with a longer description"
+            },
+            {
+                name: "Pizza 3",
+                description: "Description for this product"
+            },
+            {
+                name: "Pizza 4",
+                description: "Description for this product"
+            },
+        ],
     },
     {
-        id: "2",
-        name: "IT",
-        icon: "laptop", // materialIcons
-        description: "It - telecommunications, webpages, freelancers ",
-        totalItems: 125
+        title: "Hamburger",
+        data: [
+            {
+                name: "Burger 1",
+                description: "Description for this product"
+            },
+            {
+                name: "Burger 2",
+                description: "Description for this product"
+            },
+            {
+                name: "Burger 3",
+                description: "Description for this product"
+            },
+            {
+                name: "Burger 4",
+                description: "Description for this product"
+            },
+        ],
     },
     {
-        id: "3",
-        name: "Driver",
-        icon: "directions-car", // materialIcons,
-        description: "Rent a driver",
-        totalItems: 125
+        title: "Soup",
+        data: [
+            {
+                name: "Soup 1",
+                description: "Description for this product"
+            },
+            {
+                name: "Soup 2",
+                description: "Description for this product"
+            },
+            {
+                name: "Soup 3",
+                description: "Description for this product"
+            },
+        ],
     },
     {
-        id: "4",
-        name: "Education",
-        icon: "menu-book", // materialIcons,
-        description: "Rent a teacher, a supplinitor",
-        totalItems: 125
+        title: "Drinks",
+        data: [
+            {
+                name: "Drink 1",
+                description: "Description for this product"
+            },
+            {
+                name: "Pizza 2",
+                description: "Description for this product"
+            },
+            {
+                name: "Pizza 3",
+                description: "Description for this product"
+            },
+            {
+                name: "Pizza 4",
+                description: "Description for this product"
+            },
+        ],
     },
     {
-        id: "5",
-        name: "Category 1",
-        icon: "swap-calls", // materialIcons,
-        description: "Category 1 description with long long looooooooong text",
-        totalItems: 125
+        title: "Salads",
+        data: [
+            {
+                name: "Salad 1",
+                description: "Description for this product"
+            },
+            {
+                name: "Salad 2",
+                description: "Description for this product"
+            },
+        ],
     },
-    {
-        id: "6",
-        name: "Category 2",
-        icon: "taxi-alert", // materialIcons,
-        description: "Category 2 description",
-        totalItems: 125
-    },
-    {
-        id: "7",
-        name: "Category 3",
-        icon: "transfer-within-a-station", // materialIcons,
-        description: "Category 3 description",
-        totalItems: 125
-    },
-    {
-        id: "8",
-        name: "Category 4",
-        icon: "work", // materialIcons,
-        description: "Category 4 description",
-        totalItems: 125
-    },
-    {
-        id: "9",
-        name: "Category 5",
-        icon: "sports-baseball", // materialIcons,
-        description: "Category 5 description",
-        totalItems: 125
-    },
-    {
-        id: "10",
-        name: "Category 6",
-        icon: "park", // materialIcons,
-        description: "Category 6 description",
-        totalItems: 125
-    },
-    {
-        id: "11",
-        name: "Category 7",
-        icon: "help-center", // materialIcons,
-        description: "Category 7 description",
-        totalItems: 125
-    },
-
+    
 ]
 
+let mokupCategories = () => {
+    let result = [];
+    for (let i = 1; i < 10; i++) {
+        const obj = {
+            id: "id_" + i,
+            name: "Category " + i
+        }
+        result.push(obj);
+    }
+
+    return result;
+}
+
+export const categories2 = mokupCategories();
+
 const Config = {
-    categories
+    categories,
+    categories2
 };
 
 export default Config;
