@@ -6,11 +6,11 @@ import Icon2 from 'react-native-vector-icons/Ionicons';
 const ActionCardButton = ({type = "plus", style = {},  onPress}) => {
 
     return (
-        <TouchableOpacity style={[styles.plusButtonContainer, style]} onPress={onPress}>
+        <TouchableOpacity style={[styles.plusButtonContainer, style, type == "minus" ? {backgroundColor: "white"} : {}]} onPress={onPress}>
             {
                 type == "plus" ? 
                 (<Icon name="add" size={22} color="white" />) :
-                (<Icon name="remove" size={22} color="white" />)
+                (<Icon name="remove" size={22} color="#FF4C29" />)
             }
         </TouchableOpacity>
     )
@@ -25,8 +25,6 @@ export default function CategoryCard({name, iconName, description, total, onClic
     };
 
     const onRemoveProduct = () => {
-        if (noProducts <= 0) return;
-
         setNoProducts(prev => prev - 1)
     }
 
