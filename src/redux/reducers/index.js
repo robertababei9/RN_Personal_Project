@@ -1,7 +1,9 @@
 import authReducer from './auth.reducer';
+import productsReducer from './products.reducer';
 
 const reducers = {
-    authReducer
+    authReducer,
+    productsReducer
 };
 
 export default reducers;

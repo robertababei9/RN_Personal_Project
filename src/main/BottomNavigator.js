@@ -5,6 +5,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 
 import Home from '@src/screens/Home';
+import Cart from '@src/screens/Cart';
 import Profile from '@src/screens/Profile';
 
 const BottomTabNav = createBottomTabNavigator();
@@ -24,6 +25,17 @@ export default function BottomNavigator() {
                 options={{
                     tabBarIcon: (({color, size}) => (
                         <Icon name="home" size={size} color={color} />
+                    )),
+                    headerShown: false
+                }}
+            />
+            <BottomTabNav.Screen 
+                name="Cart" 
+                component={Cart} 
+                // children={() => <Cart props={props}/>}
+                options={{
+                    tabBarIcon: (({color, size}) => (
+                        <Icon2 name="shopping-cart" size={size} color={color} />
                     )),
                     headerShown: false
                 }}

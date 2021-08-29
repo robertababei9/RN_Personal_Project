@@ -4,20 +4,28 @@ export const categories = [
         title: "Pizza",
         data: [
             {
+                id: "pizza_1",
                 name: "Pizza 1",
-                description: "Description for this product"
+                description: "Description for this product",
+                price: 24.5
             },
             {
+                id: "pizza_2",
                 name: "Pizza 2",
-                description: "Description for this product, but with a longer description"
+                description: "Description for this product, but with a longer description",
+                price: 21.99
             },
             {
+                id: "pizza_3",
                 name: "Pizza 3",
-                description: "Description for this product"
+                description: "Description for this product",
+                price: 45.5
             },
             {
+                id: "pizza_4",
                 name: "Pizza 4",
-                description: "Description for this product"
+                description: "Description for this product",
+                price: 37
             },
         ],
     },
@@ -25,20 +33,28 @@ export const categories = [
         title: "Hamburger",
         data: [
             {
+                id: "burger_1",
                 name: "Burger 1",
-                description: "Description for this product"
+                description: "Description for this product",
+                price: 32.2
             },
             {
+                id: "burger_2",
                 name: "Burger 2",
-                description: "Description for this product"
+                description: "Description for this product",
+                price: 24.5
             },
             {
+                id: "burger_3",
                 name: "Burger 3",
-                description: "Description for this product"
+                description: "Description for this product",
+                price: 24.5
             },
             {
+                id: "burger_4",
                 name: "Burger 4",
-                description: "Description for this product"
+                description: "Description for this product",
+                price: 24.5
             },
         ],
     },
@@ -46,16 +62,22 @@ export const categories = [
         title: "Soup",
         data: [
             {
+                id: "soup_1",
                 name: "Soup 1",
-                description: "Description for this product"
+                description: "Description for this product",
+                price: 24.5
             },
             {
+                id: "soup_2",
                 name: "Soup 2",
-                description: "Description for this product"
+                description: "Description for this product",
+                price: 24.5
             },
             {
+                id: "soup_3",
                 name: "Soup 3",
-                description: "Description for this product"
+                description: "Description for this product",
+                price: 24.5
             },
         ],
     },
@@ -63,20 +85,28 @@ export const categories = [
         title: "Drinks",
         data: [
             {
+                id: "drink_1",
                 name: "Drink 1",
-                description: "Description for this product"
+                description: "Description for this product",
+                price: 24.5
             },
             {
+                id: "drink_2",
                 name: "Pizza 2",
-                description: "Description for this product"
+                description: "Description for this product",
+                price: 24.5
             },
             {
+                id: "drink_3",
                 name: "Pizza 3",
-                description: "Description for this product"
+                description: "Description for this product",
+                price: 24.5
             },
             {
+                id: "drink_4",
                 name: "Pizza 4",
-                description: "Description for this product"
+                description: "Description for this product",
+                price: 24.5
             },
         ],
     },
@@ -84,12 +114,16 @@ export const categories = [
         title: "Salads",
         data: [
             {
+                id: "salad_1",
                 name: "Salad 1",
-                description: "Description for this product"
+                description: "Description for this product",
+                price: 24.5
             },
             {
+                id: "salad_2",
                 name: "Salad 2",
-                description: "Description for this product"
+                description: "Description for this product",
+                price: 24.5
             },
         ],
     },

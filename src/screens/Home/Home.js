@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, Text, View, FlatList, ImageBackground, SectionList } from 'react-native';
+import { StyleSheet, Text, View, FlatList, ImageBackground, SectionList, TouchableOpacity } from 'react-native';
 
 import {Input} from '@src/components';
 import CategoryCard from './CategoryCard';
@@ -12,20 +12,33 @@ const BACKGROUND_IMAGE = require("@src/assets/images/home_background.jpg");
 export default function Home(props) {
 
     const renderSectionItem = ({item}) => {
-        console.log(item);
-        const {name, icon, description, totalItems} = item;
-
-        return (<CategoryCard name={name} iconName={icon} description={description} total={totalItems} onClick={onCategoryItemClick}/>)
+        return (<CategoryCard product={item} onClick={onCategoryItemClick}/>)
     }
 
     const renderSectionHeader = ({ section: { title } }) => {
+        return (
+            <View style={styles.sectionHeaderContainer}>
+                <Text style={styles.sectionHeaderText}>{title}</Text>
+                <TouchableOpacity>
+                    <Text style={styles.sectionHeaderAddText}>Add</Text>
+                </TouchableOpacity>
+            </View>
+        )
+    }
 
-        return (<Text style={styles.sectionHeader}>{title}</Text>)
+    /// admin panel
+    const renderHeader = () => {
+        return (
+            <View>
+                <TouchableOpacity onPress={() => props.navigation.navigate("AddCategory")}>
+                    <Text style={styles.sectionHeaderAddText}>Add category</Text>
+                </TouchableOpacity>
+            </View>
+        )
     }
 
     const renderHorizontalItem = ({item}) => {
         const { name } = item;
-
         return (<CategoryCircle name={name} onClick={onCategoryCircleItemClick}/>)
     }
 
@@ -55,6 +68,7 @@ export default function Home(props) {
                     sections={categories}
                     renderItem={renderSectionItem}
                     renderSectionHeader={renderSectionHeader}
+                    ListHeaderComponent={renderHeader}
                     keyExtractor={(item, index) => item + index}
                 />
         </View>
@@ -87,10 +101,20 @@ const styles = StyleSheet.create({
         width: "100%"
     },
     
-    sectionHeader: {
-        fontSize: 28,
-        fontWeight: "bold",
+    sectionHeaderContainer: {
+        flexDirection: "row",
+        justifyContent: "space-between",
+        alignItems: "center",
         marginBottom: 4,
         marginTop: 16
+    },
+    sectionHeaderText: {
+        fontSize: 28,
+        fontWeight: "bold",
+    },
+    sectionHeaderAddText: {
+        fontSize: 18,
+        fontWeight: "bold",
+        color: "#FF4C29",
     }
 })

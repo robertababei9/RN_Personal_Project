@@ -3,6 +3,9 @@ import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import Icon2 from 'react-native-vector-icons/Ionicons';
 
+import { useDispatch } from 'react-redux';
+import { addProduct, removeProduct } from '@src/redux/actions/products.action';
+
 const ActionCardButton = ({type = "plus", style = {},  onPress}) => {
 
     return (
@@ -16,16 +19,23 @@ const ActionCardButton = ({type = "plus", style = {},  onPress}) => {
     )
 }
 
-export default function CategoryCard({name, iconName, description, total, onClick}) {
+export default function CategoryCard({product, onClick}) {
 
+    const {id, name, iconName, description, price } = product;
     const [noProducts, setNoProducts] = useState(0);
+
+    const dispatch = useDispatch();
 
     const onAddProduct = () => {
         setNoProducts(prev => prev + 1)
+
+        dispatch(addProduct(product));
     };
 
     const onRemoveProduct = () => {
-        setNoProducts(prev => prev - 1)
+        setNoProducts(prev => prev - 1);
+
+        dispatch(removeProduct(product));
     }
 
     return (
@@ -41,7 +51,7 @@ export default function CategoryCard({name, iconName, description, total, onClic
                 </View>
 
                 <View style={styles.priceActionsContainer}>
-                    <Text style={styles.priceText}>21.5 lei</Text>
+                    <Text style={styles.priceText}>{price} lei</Text>
                     
                     <View style={styles.actionButtonsContainer}>
                         {
@@ -99,7 +109,8 @@ const styles = StyleSheet.create({
     priceActionsContainer: {
         marginTop: 16,
         flexDirection: "row",
-        justifyContent: "space-between"
+        justifyContent: "space-between",
+        alignItems: "center"
     },
     actionButtonsContainer: {
         flexDirection: "row",
@@ -124,8 +135,8 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
         borderRadius: 8,
-        height: 30,
-        width: 30
+        height: 36,
+        width: 36
     }
 
 })
