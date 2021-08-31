@@ -15,7 +15,10 @@ const Category = mongoose.model(
             type: Date,
             required: true
         },
-        AvatarIconName: String
+        AvatarIconName: {
+            type: String,
+            required: true
+        }
     })
 );
 

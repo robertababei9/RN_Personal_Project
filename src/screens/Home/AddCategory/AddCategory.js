@@ -1,8 +1,9 @@
 import React, {useState, useLayoutEffect} from 'react'
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { Button } from '@src/components';
+import Modal from "./ModalIcons";
+import { getFoodCategoryByName } from '@src/assets/images';
 
-import {Input} from '@src/components';
+import { Input, Button } from '@src/components';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import CategoryAPI from '@src/api/CategoryAPI';
@@ -10,9 +11,12 @@ import CategoryAPI from '@src/api/CategoryAPI';
 export default function AddCategory(props) {
 
     const [name, setName] = useState("");
+    const [selectedIcon, setSelectedIcon] = useState("pizza_icon");
+    const [modalVisible, setModalVisible] = useState(false);
 
     // add Save button to header
     useLayoutEffect(() => {
+
         if (props.navigation) {
             props.navigation.setOptions({
                 headerRight: () => (
@@ -25,11 +29,12 @@ export default function AddCategory(props) {
                             fontSize: 16
                         }}
                         type="secondary"
-                        disabled={name == "" }
+                        disabled={name == "" || selectedIcon == null}
                         onPress={async () => {
                             const model = {
                                 name: name,
-                                dscription: "Test description"
+                                dscription: "Test description",
+                                avatarIconName: selectedIcon
                             };
                             let category = await CategoryAPI.Create(model);
                             console.log("Created category: ", category);
@@ -40,13 +45,17 @@ export default function AddCategory(props) {
                   ),
             })
         }
-    }, [props, name]);
+    }, [props, name, selectedIcon]);
+
+    const toggleModal = () => {
+        setModalVisible(prev => !prev);
+    }
 
 
     return (
         <View style={styles.container}>
-            <TouchableOpacity style={styles.avatarContainer}>
-                <Image style={styles.avatarImage} source={require("@src/assets/images/food_category/pizza_icon.png")}/>
+            <TouchableOpacity style={styles.avatarContainer} onPress={toggleModal}>
+                <Image style={styles.avatarImage} source={getFoodCategoryByName(selectedIcon)}/>
                 <Icon style={styles.avatarAdd} name="add" size={42} color="#FF4C29" />
             </TouchableOpacity>
 
@@ -54,6 +63,14 @@ export default function AddCategory(props) {
                 <Text style={styles.rowInputText}>Name</Text>
                 <Input required value={name} onChangeText={setName}/>
             </View>
+
+ 
+            <Modal 
+                modalVisible={modalVisible} 
+                toggleModal={toggleModal} 
+                onIconSelected={(icon) => setSelectedIcon(icon)}
+                onBackdropPress={() => setModalVisible(false)}
+            />
         </View>
     )
 }
@@ -89,5 +106,7 @@ const styles = StyleSheet.create({
     },
     rowInputText: {
         fontSize: 18
-    }
+    },
+
+
 })

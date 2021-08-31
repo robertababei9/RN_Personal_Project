@@ -17,7 +17,7 @@ exports.create = async (req, res) => {
         name: req.body.name,
         description: req.body.description,
         CreatedDate: new Date(),
-        AvatarIconName: "pizza"
+        AvatarIconName: req.body.avatarIconName
     });
 
     try {

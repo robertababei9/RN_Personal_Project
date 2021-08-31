@@ -86,7 +86,7 @@ export default function SignUp(props) {
                     <Input 
                         style={{width: "80%"}} 
                         secureTextEntry={true} 
-                        placeholder="Password" 
+                        placeholder="Confirm Password" 
                         value={confirmPassword} 
                         onChangeText={setConfirmPassword}
                     />
