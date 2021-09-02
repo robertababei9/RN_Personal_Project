@@ -1,7 +1,8 @@
 
-export const categories = [
+export const categoriesMockup = [
     {
         title: "Pizza",
+        id: "sectionId_123na1230#mrf9",
         data: [
             {
                 id: "pizza_1",
@@ -31,6 +32,7 @@ export const categories = [
     },
     {
         title: "Hamburger",
+        id: "sectionId_456na1230#mrf9",
         data: [
             {
                 id: "burger_1",
@@ -60,6 +62,7 @@ export const categories = [
     },
     {
         title: "Soup",
+        id: "sectionId_928na1230#mrf9",
         data: [
             {
                 id: "soup_1",
@@ -83,6 +86,7 @@ export const categories = [
     },
     {
         title: "Drinks",
+        id: "sectionId_166na1230#mrf9",
         data: [
             {
                 id: "drink_1",
@@ -112,6 +116,7 @@ export const categories = [
     },
     {
         title: "Salads",
+        id: "sectionId_177na1230#mrf9",
         data: [
             {
                 id: "salad_1",
@@ -146,7 +151,7 @@ let mokupCategories = () => {
 export const categories2 = mokupCategories();
 
 const Config = {
-    categories,
+    categoriesMockup,
     categories2
 };
 

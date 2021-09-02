@@ -17,7 +17,8 @@ exports.create = async (req, res) => {
         name: req.body.name,
         description: req.body.description,
         CreatedDate: new Date(),
-        AvatarIconName: req.body.avatarIconName
+        AvatarIconName: req.body.avatarIconName,
+        Subcategories: []
     });
 
     try {

@@ -12,7 +12,8 @@ export default function Input(props) {
         value,
         placeholder,
         error = false,
-        required = false
+        required = false,
+        keyboardType
     } = props;
 
     const [errorStyle, setErrorStyle] = useState(error ? ERR_STYLE_OBJ : {})
@@ -29,6 +30,12 @@ export default function Input(props) {
                 setErrorStyle(null)
         }
 
+        if (keyboardType == "numeric") {
+            
+            if (isNaN(_val))
+                return;
+        }
+
         onChangeText(_val);
     }
 
@@ -42,6 +49,7 @@ export default function Input(props) {
             value={value}
             secureTextEntry={secureTextEntry}
             placeholder={placeholder}
+            keyboardType={keyboardType}
         />
     )
 }

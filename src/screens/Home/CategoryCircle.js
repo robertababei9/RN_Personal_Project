@@ -1,10 +1,12 @@
 import React from 'react'
-import { StyleSheet, Image, View, TouchableOpacity } from 'react-native'
+import { StyleSheet, Image, View, TouchableOpacity } from 'react-native';
 
-export default function CategoryCircle({imageName, onClick}) {
+import { getFoodCategoryByName } from '@src/assets/images';
+
+export default function CategoryCircle({onClick, iconName}) {
     return (
         <TouchableOpacity onPress={onClick} style={styles.container}>
-            <Image style={{width: 45, height: 45}} source={require("@src/assets/images/food_category/pizza_icon.png")} />
+            <Image style={{width: 45, height: 45}} source={getFoodCategoryByName(iconName)} />
         </TouchableOpacity>
     )
 }

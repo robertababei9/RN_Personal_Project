@@ -1,25 +1,40 @@
-import React from 'react'
-import { StyleSheet, Text, View, FlatList, ImageBackground, SectionList, TouchableOpacity } from 'react-native';
+import React, { useState, useEffect } from 'react'
+import { StyleSheet, Text, View, FlatList, ActivityIndicator, SectionList, TouchableOpacity } from 'react-native';
 
 import {Input} from '@src/components';
 import CategoryCard from './CategoryCard';
 import CategoryCircle from './CategoryCircle';
 
-import { categories, categories2 } from './config';
-const BACKGROUND_IMAGE = require("@src/assets/images/home_background.jpg");
+import { categoriesMockup, categories2 } from './config';
+
+import CategoryAPI from '@src/api/CategoryAPI';
 
 
 export default function Home(props) {
+
+    const [categories, setCategories] = useState([]);
+    const [categoriesLoading, setCategoriesLoading] = useState(false);
+
+    // GET categories
+    useEffect(() => {
+        setCategoriesLoading(true);
+        CategoryAPI.GetAll().then(data => {
+            setCategories(data);
+            setCategoriesLoading(false);
+        })
+    }, [])
 
     const renderSectionItem = ({item}) => {
         return (<CategoryCard product={item} onClick={onCategoryItemClick}/>)
     }
 
-    const renderSectionHeader = ({ section: { title } }) => {
+    const renderSectionHeader = ({ section}) => {
+        const { title } = section;
+
         return (
             <View style={styles.sectionHeaderContainer}>
                 <Text style={styles.sectionHeaderText}>{title}</Text>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={() => props.navigation.navigate("AddSubcategory", { sectionId: section.id})}>
                     <Text style={styles.sectionHeaderAddText}>Add</Text>
                 </TouchableOpacity>
             </View>
@@ -39,7 +54,7 @@ export default function Home(props) {
 
     const renderHorizontalItem = ({item}) => {
         const { name } = item;
-        return (<CategoryCircle name={name} onClick={onCategoryCircleItemClick}/>)
+        return (<CategoryCircle onClick={onCategoryCircleItemClick} iconName={item.AvatarIconName}/>)
     }
 
     const onCategoryItemClick = () => {
@@ -57,15 +72,19 @@ export default function Home(props) {
                     <Input style={styles.searchInput}/>
                 </View>
 
+                {/* TODO: Add ActivityIndicator while horizontal flatlist is loading. Refactor styles.container ... */}
+                {/* <ActivityIndicator size="large" color="#FF4C29"/> */}
+
                 <FlatList 
                     horizontal
-                    data={categories2}
+                    data={categories}
                     renderItem={renderHorizontalItem}
-                    keyExtractor={item => item.id}
+                    keyExtractor={item => item._id}
                 />
 
+
                 <SectionList
-                    sections={categories}
+                    sections={categoriesMockup}
                     renderItem={renderSectionItem}
                     renderSectionHeader={renderSectionHeader}
                     ListHeaderComponent={renderHeader}

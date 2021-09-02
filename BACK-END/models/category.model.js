@@ -18,7 +18,13 @@ const Category = mongoose.model(
         AvatarIconName: {
             type: String,
             required: true
-        }
+        },
+        Subcategories: [
+            {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "Subcategory"
+            }
+        ]
     })
 );
 

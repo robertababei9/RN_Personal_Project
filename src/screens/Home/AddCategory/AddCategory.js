@@ -3,7 +3,7 @@ import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Modal from "./ModalIcons";
 import { getFoodCategoryByName } from '@src/assets/images';
 
-import { Input, Button } from '@src/components';
+import { Input, Button, RowInput } from '@src/components';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import CategoryAPI from '@src/api/CategoryAPI';
@@ -37,7 +37,7 @@ export default function AddCategory(props) {
                                 avatarIconName: selectedIcon
                             };
                             let category = await CategoryAPI.Create(model);
-                            console.log("Created category: ", category);
+                            // console.log("Created category: ", category);
                             props.navigation.navigate("Home");
                         }}
                         title="Save"
@@ -59,10 +59,7 @@ export default function AddCategory(props) {
                 <Icon style={styles.avatarAdd} name="add" size={42} color="#FF4C29" />
             </TouchableOpacity>
 
-            <View style={styles.rowContainer}>
-                <Text style={styles.rowInputText}>Name</Text>
-                <Input required value={name} onChangeText={setName}/>
-            </View>
+            <RowInput label="Name" value={name} onChangeText={setName}/>
 
  
             <Modal 

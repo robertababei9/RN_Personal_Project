@@ -13,7 +13,32 @@ const GetAccessToken = async function() {
 }
 
 const Utils = {
+    CreateGetRequest: async function (partialUrl) {
+        //AppConstants.UserApiCall = true;
+        let resultObject = null;
+        let token = await GetAccessToken();
+        let dataPostObj = {
+            method: "GET",
+            mode: "cors",
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json; charset=utf-8",
+                Authorization: "Bearer " + token,
+                dataType: "json",
+            },
+        };
 
+        await fetch(SiteUrl + partialUrl, dataPostObj)
+            .then((response) => response.json())
+            .then((responseJson) => {
+                resultObject = responseJson;
+            })
+            .catch((error) => {
+                console.log("Error on get " + partialUrl + ": " + error);
+            });
+            
+        return resultObject;
+    },
     CreatePostRequest: async function (partialUrl, jsonObject) {
         let resultObject = null;
         let token = await GetAccessToken();
