@@ -7,11 +7,12 @@ const Role = db.role;
 
 verifyToken = (req, res, next) => {
     let token = req.headers["authorization"];
-    token = token.replace("Bearer", "").trim();
   
     if (!token) {
       return res.status(403).send({ message: "No token provided!" });
     }
+
+    token = token.replace("Bearer", "").trim();
   
     jwt.verify(token, config.secret, (err, decoded) => {
       if (err) {

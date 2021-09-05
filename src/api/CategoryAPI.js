@@ -9,6 +9,11 @@ const CategoryAPI = {
     Create: async function (model) {
         let result = await Utils.CreatePostRequest("category", model);
         return result;
+    },
+    GetCategorySubcategoryModel: async function () {
+        let result = await Utils.CreateGetRequest("category/getCategorySubcategoryModel");
+        if (result == null) result = [];
+        return result;
     }
 };
 

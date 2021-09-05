@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { StyleSheet, Text, View, FlatList, ActivityIndicator, SectionList, TouchableOpacity } from 'react-native';
 
 import {Input} from '@src/components';
@@ -12,29 +12,51 @@ import CategoryAPI from '@src/api/CategoryAPI';
 
 export default function Home(props) {
 
+    const sectionListRef = useRef(null);
+
     const [categories, setCategories] = useState([]);
+    const [sectionListData, setSectionListData] = useState([]);
     const [categoriesLoading, setCategoriesLoading] = useState(false);
 
-    // GET categories
+
+    // GET section list data
     useEffect(() => {
+        fetchSectionListData();
+    }, []);
+
+    const fetchSectionListData = () => {
+
         setCategoriesLoading(true);
-        CategoryAPI.GetAll().then(data => {
-            setCategories(data);
+        CategoryAPI.GetCategorySubcategoryModel().then(data => {
             setCategoriesLoading(false);
+            const _sectionListData = data.map(category => ({
+                title: category.name,
+                id: category._id,
+                data: category.Subcategories
+            }));
+            setSectionListData(_sectionListData);
+
+            const _categories = data.map(category => ({
+                id: category._id,
+                name: category.name,
+                AvatarIconName: category.AvatarIconName
+            }));
+            setCategories(_categories);
+
         })
-    }, [])
+    }
 
     const renderSectionItem = ({item}) => {
         return (<CategoryCard product={item} onClick={onCategoryItemClick}/>)
     }
 
     const renderSectionHeader = ({ section}) => {
-        const { title } = section;
+        const { title, id } = section;
 
         return (
             <View style={styles.sectionHeaderContainer}>
                 <Text style={styles.sectionHeaderText}>{title}</Text>
-                <TouchableOpacity onPress={() => props.navigation.navigate("AddSubcategory", { sectionId: section.id})}>
+                <TouchableOpacity onPress={() => props.navigation.navigate("AddSubcategory", { sectionId: id})}>
                     <Text style={styles.sectionHeaderAddText}>Add</Text>
                 </TouchableOpacity>
             </View>
@@ -53,16 +75,19 @@ export default function Home(props) {
     }
 
     const renderHorizontalItem = ({item}) => {
-        const { name } = item;
-        return (<CategoryCircle onClick={onCategoryCircleItemClick} iconName={item.AvatarIconName}/>)
+        return (<CategoryCircle onClick={() => onCategoryCircleItemClick(item)} iconName={item.AvatarIconName}/>)
     }
 
     const onCategoryItemClick = () => {
         props.navigation.navigate('HomeInfo');
     }
 
-    const onCategoryCircleItemClick = () => {
-        console.log("Category circle pressed");
+    const onCategoryCircleItemClick = (item) => {
+        const sectionIndex = categories.indexOf(item);
+        sectionListRef.current.scrollToLocation({
+            sectionIndex: sectionIndex,
+            itemIndex: 0
+        });
     }
 
     return (
@@ -84,11 +109,14 @@ export default function Home(props) {
 
 
                 <SectionList
-                    sections={categoriesMockup}
+                    ref={sectionListRef}
+                    sections={sectionListData}
                     renderItem={renderSectionItem}
                     renderSectionHeader={renderSectionHeader}
                     ListHeaderComponent={renderHeader}
                     keyExtractor={(item, index) => item + index}
+                    onRefresh={fetchSectionListData}
+                    refreshing={categoriesLoading}
                 />
         </View>
     )

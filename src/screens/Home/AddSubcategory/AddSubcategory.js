@@ -3,9 +3,11 @@ import { StyleSheet, Text, View } from 'react-native';
 
 import { RowInput, Button } from '@src/components';
 
+import SubcategoryAPI from '@src/api/SubcategoryAPI';
+
 export default function AddSubcategory(props) {
 
-    console.log(props.route.params.sectionId);
+    const categoryId = props.route.params.sectionId
 
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
@@ -28,7 +30,14 @@ export default function AddSubcategory(props) {
                         type="secondary"
                         disabled={title == "" || price == 0}
                         onPress={async () => {
-                            
+                            const model = {
+                                name: title,
+                                description: description,
+                                price: price
+                            };
+
+                            await SubcategoryAPI.Create(model, categoryId);
+                            props.navigation.goBack();
                         }}
                         title="Save"
                     />
@@ -39,7 +48,7 @@ export default function AddSubcategory(props) {
 
     return (
         <View style={styles.container}>
-            <Text>Category id: </Text>
+            {/* <Text>Category id: {categoryId}</Text> */}
             <RowInput label="Title" value={title} onChangeText={setTitle} />
             <RowInput label="Description" value={description} onChangeText={setDescription} />
             <RowInput label="Price" value={price} onChangeText={setPrice} keyboardType="numeric"/>

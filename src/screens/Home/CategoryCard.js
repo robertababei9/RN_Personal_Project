@@ -21,7 +21,7 @@ const ActionCardButton = ({type = "plus", style = {},  onPress}) => {
 
 export default function CategoryCard({product, onClick}) {
 
-    const {id, name, iconName, description, price } = product;
+    const {id, Name, iconName, Description, Price } = product;
     const [noProducts, setNoProducts] = useState(0);
 
     const dispatch = useDispatch();
@@ -46,12 +46,12 @@ export default function CategoryCard({product, onClick}) {
 
             <View style={styles.rightContainer} >
                 <View>
-                    <Text style={styles.nameText}>{name}</Text>
-                    <Text style={styles.descriptionText}>{description}</Text>
+                    <Text style={styles.nameText}>{Name}</Text>
+                    <Text style={styles.descriptionText}>{Description}</Text>
                 </View>
 
                 <View style={styles.priceActionsContainer}>
-                    <Text style={styles.priceText}>{price} lei</Text>
+                    <Text style={styles.priceText}>{Price} lei</Text>
                     
                     <View style={styles.actionButtonsContainer}>
                         {

@@ -29,3 +29,13 @@ exports.create = async (req, res) => {
     }
 }
 
+exports.getCategorySubcategoryModel = async (req, res) => {
+    const categories = await Category.find({}).populate("Subcategories");
+
+    try {
+        res.send(categories);
+    } catch (error) {
+        res.status(500).send(error);
+    }
+}
+

@@ -17,6 +17,10 @@ module.exports = function(app) {
 
   app.post("/api/category", controller.create)
 
+  app.get("/api/category/getCategorySubcategoryModel", controller.getCategorySubcategoryModel)
+
+
+
 
 //   app.get(
 //     "/api/test/admin",
