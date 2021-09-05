@@ -3,9 +3,14 @@ import { StyleSheet, Image, View, TouchableOpacity } from 'react-native';
 
 import { getFoodCategoryByName } from '@src/assets/images';
 
-export default function CategoryCircle({onClick, iconName}) {
+export default function CategoryCircle({onClick, iconName, selected}) {
+
+    let isSelectedStyle = {};
+    if (selected)
+        isSelectedStyle = {borderWidth: 2.3, borderColor: "#FF4C29", shadowColor: "#FF4C29", elevation: 30}
+
     return (
-        <TouchableOpacity onPress={onClick} style={styles.container}>
+        <TouchableOpacity onPress={onClick} style={[styles.container, isSelectedStyle]}>
             <Image style={{width: 45, height: 45}} source={getFoodCategoryByName(iconName)} />
         </TouchableOpacity>
     )

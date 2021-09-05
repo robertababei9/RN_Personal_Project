@@ -13,16 +13,23 @@ import CategoryAPI from '@src/api/CategoryAPI';
 export default function Home(props) {
 
     const sectionListRef = useRef(null);
+    const categoryListRef = useRef(null);
 
     const [categories, setCategories] = useState([]);
     const [sectionListData, setSectionListData] = useState([]);
     const [categoriesLoading, setCategoriesLoading] = useState(false);
+    const [selectedSectionIndex, setSelectedSectionIndex] = useState(0);
 
 
     // GET section list data
     useEffect(() => {
         fetchSectionListData();
     }, []);
+
+    useEffect(() => {
+        if (categories.length > 0)
+            categoryListRef.current.scrollToIndex({index: selectedSectionIndex});
+    }, [selectedSectionIndex]);
 
     const fetchSectionListData = () => {
 
@@ -45,6 +52,24 @@ export default function Home(props) {
 
         })
     }
+
+    const renderHorizontalItem = ({item}) => {
+        return (<CategoryCircle 
+                    onClick={() => onCategoryCircleItemClick(item)} 
+                    iconName={item.AvatarIconName} 
+                    selected={categories.indexOf(item) == selectedSectionIndex}
+                />)
+    }
+
+    const onCategoryCircleItemClick = (item) => {
+        const sectionIndex = categories.indexOf(item);
+        sectionListRef.current.scrollToLocation({
+            sectionIndex: sectionIndex,
+            itemIndex: 0
+        });
+        setSelectedSectionIndex(sectionIndex);
+    }
+
 
     const renderSectionItem = ({item}) => {
         return (<CategoryCard product={item} onClick={onCategoryItemClick}/>)
@@ -74,20 +99,25 @@ export default function Home(props) {
         )
     }
 
-    const renderHorizontalItem = ({item}) => {
-        return (<CategoryCircle onClick={() => onCategoryCircleItemClick(item)} iconName={item.AvatarIconName}/>)
-    }
-
     const onCategoryItemClick = () => {
         props.navigation.navigate('HomeInfo');
     }
 
-    const onCategoryCircleItemClick = (item) => {
-        const sectionIndex = categories.indexOf(item);
-        sectionListRef.current.scrollToLocation({
-            sectionIndex: sectionIndex,
-            itemIndex: 0
-        });
+    const getSectionOnScroll = ({viewableItems}) => {
+        if (viewableItems.length > 0 && viewableItems[0].section) {
+            const sectionTitle = viewableItems[0].section.title;
+            const index = categories.map(x => x.name).indexOf(sectionTitle);
+            setSelectedSectionIndex(index);
+        }
+    }
+
+
+    if (categoriesLoading) {
+        return (
+            <View style={{flex: 1, justifyContent: "center", alignItems: "center"}}>
+                <ActivityIndicator size="large" color="#FF4C29"/>
+            </View>
+        )
     }
 
     return (
@@ -97,10 +127,8 @@ export default function Home(props) {
                     <Input style={styles.searchInput}/>
                 </View>
 
-                {/* TODO: Add ActivityIndicator while horizontal flatlist is loading. Refactor styles.container ... */}
-                {/* <ActivityIndicator size="large" color="#FF4C29"/> */}
-
-                <FlatList 
+                <FlatList
+                    ref={categoryListRef}
                     horizontal
                     data={categories}
                     renderItem={renderHorizontalItem}
@@ -117,6 +145,11 @@ export default function Home(props) {
                     keyExtractor={(item, index) => item + index}
                     onRefresh={fetchSectionListData}
                     refreshing={categoriesLoading}
+                    viewabilityConfig={{
+                        itemVisiblePercentThreshold: 50
+                    }}
+                    onViewableItemsChanged={getSectionOnScroll}
+
                 />
         </View>
     )
