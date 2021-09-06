@@ -22,7 +22,7 @@ export default function Routes() {
   const authReducer = useSelector(state => state.authReducer);
   
   useEffect(async () => {
-      console.log("authReducer.user: ", authReducer.user);
+    //   console.log("authReducer.user: ", authReducer.user);
 
       // LOOGED IN
       if (authReducer.user != null) {

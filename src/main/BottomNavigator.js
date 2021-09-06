@@ -3,6 +3,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import Icon2 from 'react-native-vector-icons/MaterialIcons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
+import { useSelector } from 'react-redux';
 
 import Home from '@src/screens/Home';
 import Cart from '@src/screens/Cart';
@@ -11,6 +12,9 @@ import Profile from '@src/screens/Profile';
 const BottomTabNav = createBottomTabNavigator();
 
 export default function BottomNavigator() {
+
+    const { selectedProducts } = useSelector(state => state.productsReducer);
+
     return (
         <BottomTabNav.Navigator
             initialRouteName="Home"
@@ -37,7 +41,8 @@ export default function BottomNavigator() {
                     tabBarIcon: (({color, size}) => (
                         <Icon2 name="shopping-cart" size={size} color={color} />
                     )),
-                    headerShown: false
+                    headerShown: false,
+                    tabBarBadge: selectedProducts.length || null
                 }}
             />
             <BottomTabNav.Screen 

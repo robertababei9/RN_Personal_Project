@@ -15,10 +15,17 @@ export default function Home(props) {
     const sectionListRef = useRef(null);
     const categoryListRef = useRef(null);
 
+    const [searchValue, setSearchValue] = useState("");
+
     const [categories, setCategories] = useState([]);
     const [sectionListData, setSectionListData] = useState([]);
     const [categoriesLoading, setCategoriesLoading] = useState(false);
     const [selectedSectionIndex, setSelectedSectionIndex] = useState(0);
+
+    const [tempCategories, setTempCategories] = useState({
+        categories: [],
+        sectionsData: []
+    });
 
 
     // GET section list data
@@ -26,11 +33,13 @@ export default function Home(props) {
         fetchSectionListData();
     }, []);
 
+    // when a section is focused ( is in wanted viewport)
     useEffect(() => {
-        if (categories.length > 0)
+        if (categories.length > 0 && categoryListRef.current)
             categoryListRef.current.scrollToIndex({index: selectedSectionIndex});
     }, [selectedSectionIndex]);
 
+    // fetch category list
     const fetchSectionListData = () => {
 
         setCategoriesLoading(true);
@@ -49,6 +58,11 @@ export default function Home(props) {
                 AvatarIconName: category.AvatarIconName
             }));
             setCategories(_categories);
+
+            setTempCategories({
+                categories: _categories,
+                sectionsData: _sectionListData
+            });
 
         })
     }
@@ -88,7 +102,7 @@ export default function Home(props) {
         )
     }
 
-    /// admin panel
+    /// admin panel - render section header
     const renderHeader = () => {
         return (
             <View>
@@ -111,6 +125,31 @@ export default function Home(props) {
         }
     }
 
+    const handleSearch = (val) => {
+        setSearchValue(val);
+
+        if (val == "") {
+            setSectionListData(tempCategories.sectionsData);
+            return;
+        }
+
+        const search_sectionData = tempCategories.sectionsData.filter(category =>
+            category.data.some(subcategory => (
+                subcategory.Name.toLowerCase().includes(val.toLowerCase()) ||
+                subcategory.Description.toLowerCase().includes(val.toLowerCase())
+            ))
+        )
+        .map(category => {
+            return Object.assign({}, category, {data: category.data.filter(subcategory => (
+                subcategory.Name.toLowerCase().includes(val.toLowerCase()) ||
+                subcategory.Description.toLowerCase().includes(val.toLowerCase())
+            ))})
+        });
+
+        console.log(search_sectionData)
+        setSectionListData(search_sectionData);
+    }
+
 
     if (categoriesLoading) {
         return (
@@ -124,20 +163,26 @@ export default function Home(props) {
         <View style={styles.container} >
                 <View style={styles.searchContainer}>
                     <Text style={styles.searchText}>Search for food</Text>
-                    <Input style={styles.searchInput}/>
+                    <Input style={styles.searchInput} value={searchValue} onChangeText={handleSearch}/>
                 </View>
 
-                <FlatList
-                    ref={categoryListRef}
-                    horizontal
-                    data={categories}
-                    renderItem={renderHorizontalItem}
-                    keyExtractor={item => item._id}
-                />
+                {
+                    searchValue == "" && (
+                        <FlatList
+                            ref={categoryListRef}
+                            horizontal
+                            data={categories}
+                            renderItem={renderHorizontalItem}
+                            keyExtractor={item => item._id}
+                        />
+                    )
+                }
+
 
 
                 <SectionList
                     ref={sectionListRef}
+                    style={{width: "100%"}}
                     sections={sectionListData}
                     renderItem={renderSectionItem}
                     renderSectionHeader={renderSectionHeader}
@@ -159,9 +204,9 @@ const styles = StyleSheet.create({
     container: {
         backgroundColor: "white",
         flex: 1,
-        flexDirection: "row",
-        flexWrap: "wrap",
-        justifyContent: "space-around",
+        // flexDirection: "row",
+        // flexWrap: "wrap",
+        // justifyContent: "space-around",
         alignItems: "center",
         paddingHorizontal: 6
     },
