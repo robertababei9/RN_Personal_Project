@@ -68,6 +68,34 @@ const Utils = {
 
         return resultObject;
     },
+    CreateDeleteRequest: async function (partialUrl, jsonObject) {
+        let resultObject = null;
+        let token = await GetAccessToken();
+        let dataPostObj = {
+            method: "DELETE",
+            credentials: "same-origin",
+            mode: "same-origin",
+            body: JSON.stringify(jsonObject),
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+                Authorization: "Bearer " + token,
+            },
+        };
+        await fetch(
+            SiteUrl + partialUrl,
+            dataPostObj
+        )
+            .then((response) => response.json())
+            .then((json) => {
+                resultObject = json;
+            })
+            .catch((error) => {
+                resultObject = null;
+            });
+
+        return resultObject;
+    },
     CreatePostRequestEmpty: async function (partialUrl, jsonObject) {
         let resultObject = null;
         let dataPostObj = {

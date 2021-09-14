@@ -78,7 +78,7 @@ export default function CategoryCard({product, onClick}) {
 const styles = StyleSheet.create({
     categoryCard: {
         flexDirection: "row",
-        backgroundColor: "#dfdfe5",
+        backgroundColor: "#F5F5F5",
         // height: 180,
         // width: "95%",
         marginVertical: 8,

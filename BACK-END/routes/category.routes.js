@@ -19,6 +19,8 @@ module.exports = function(app) {
 
   app.get("/api/category/getCategorySubcategoryModel", controller.getCategorySubcategoryModel)
 
+  app.delete("/api/category/:id", controller.delete);
+
 
 
 

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { StyleSheet, Text, View, FlatList, ActivityIndicator, SectionList, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, FlatList, ActivityIndicator, SectionList, TouchableOpacity, Modal, Alert } from 'react-native';
 
 import {Input} from '@src/components';
 import CategoryCard from './CategoryCard';
@@ -95,9 +95,17 @@ export default function Home(props) {
         return (
             <View style={styles.sectionHeaderContainer}>
                 <Text style={styles.sectionHeaderText}>{title}</Text>
-                <TouchableOpacity onPress={() => props.navigation.navigate("AddSubcategory", { sectionId: id})}>
-                    <Text style={styles.sectionHeaderAddText}>Add</Text>
-                </TouchableOpacity>
+                <View style={styles.sectionHeaderActionsContainer}>
+                    <TouchableOpacity style={{marginLeft: 8}} onPress={() => props.navigation.navigate("AddSubcategory", { sectionId: id})}>
+                        <Text style={styles.sectionHeaderAddText}>Add</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={{marginLeft: 32}} onPress={() => props.navigation.navigate("AddSubcategory", { sectionId: id})}>
+                        <Text style={styles.sectionHeaderAddText}>Edit</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={{marginLeft: 8}} onPress={() => handleDeleteAlert(id)}>
+                        <Text style={styles.sectionHeaderAddText}>Delete</Text>
+                    </TouchableOpacity>
+                </View>
             </View>
         )
     }
@@ -150,6 +158,35 @@ export default function Home(props) {
         setSectionListData(search_sectionData);
     }
 
+    const handleDeleteAlert = (sectionId) => {
+        Alert.alert(
+            "Are you sure ?",
+            "Are you sure you want to delete the section ?",
+            [
+                // YES
+                {
+                    text: "Yes",
+                    onPress: async () => {
+                        const result = await CategoryAPI.Delete(sectionId) ;
+                        if (result != true) return;
+                        
+                        // API call to delete + refresh SectionList
+                        const newSectionList = sectionListData.filter(section => section.id != sectionId);
+                        const newCategoryIcons = categories.filter(category => category.id != sectionId);
+
+                        setSectionListData(newSectionList);
+                        setCategories(newCategoryIcons);
+                        setTempCategories(prev => ({...prev, sectionsData: newSectionList, categories: newCategoryIcons}));
+                    }
+                },
+                // NO
+                {
+                    text: "No",
+                }
+            ]
+        )
+    }
+
 
     if (categoriesLoading) {
         return (
@@ -170,6 +207,7 @@ export default function Home(props) {
                     searchValue == "" && (
                         <FlatList
                             ref={categoryListRef}
+                            style={{minHeight: 65}}
                             horizontal
                             data={categories}
                             renderItem={renderHorizontalItem}
@@ -177,8 +215,6 @@ export default function Home(props) {
                         />
                     )
                 }
-
-
 
                 <SectionList
                     ref={sectionListRef}
@@ -241,5 +277,8 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontWeight: "bold",
         color: "#FF4C29",
+    },
+    sectionHeaderActionsContainer: {
+        flexDirection: "row"
     }
 })

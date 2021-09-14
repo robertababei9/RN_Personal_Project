@@ -14,6 +14,10 @@ const CategoryAPI = {
         let result = await Utils.CreateGetRequest("category/getCategorySubcategoryModel");
         if (result == null) result = [];
         return result;
+    },
+    Delete: async function (id) {
+        let result = Utils.CreateDeleteRequest("category/" + id);
+        return result;
     }
 };
 
