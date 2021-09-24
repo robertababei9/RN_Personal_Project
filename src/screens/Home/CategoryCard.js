@@ -1,9 +1,8 @@
-import React, { useState } from 'react'
+import React, { useState, useMemo } from 'react'
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import Icon2 from 'react-native-vector-icons/Ionicons';
 
-import { useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { addProduct, removeProduct } from '@src/redux/actions/products.action';
 
 const ActionCardButton = ({type = "plus", style = {},  onPress}) => {
@@ -19,25 +18,24 @@ const ActionCardButton = ({type = "plus", style = {},  onPress}) => {
     )
 }
 
-export default function CategoryCard({product, onClick}) {
+export default function CategoryCard({product, qty = 0, onClick}) {
 
-    const {id, Name, iconName, Description, Price } = product;
-    const [noProducts, setNoProducts] = useState(0);
+    const {_id, Name, iconName, Description, Price } = product;
 
+    const { selectedProducts } = useSelector(state => state.productsReducer);
     const dispatch = useDispatch();
 
-    const onAddProduct = () => {
-        setNoProducts(prev => prev + 1)
 
+    const onAddProduct = () => {
         dispatch(addProduct(product));
     };
 
     const onRemoveProduct = () => {
-        setNoProducts(prev => prev - 1);
-
-        dispatch(removeProduct(product));
+        dispatch(removeProduct(product._id));
     }
 
+    const nrOfProducts = useMemo(() => selectedProducts.filter(x => x._id == product._id).length, [selectedProducts]);
+    
     return (
         <TouchableOpacity onPress={onClick} style={styles.categoryCard}>
             <View style={styles.pictureContainer} > 
@@ -55,10 +53,10 @@ export default function CategoryCard({product, onClick}) {
                     
                     <View style={styles.actionButtonsContainer}>
                         {
-                            noProducts > 0 ? (
+                            nrOfProducts > 0 ? (
                                 <React.Fragment>
                                     <ActionCardButton style={{marginRight: 6}} type="minus" onPress={onRemoveProduct}/>
-                                    <Text style={styles.priceText}>{noProducts}</Text>
+                                    <Text style={styles.priceText}>{nrOfProducts}</Text>
                                     <ActionCardButton style={{marginLeft: 6}} type="plus" onPress={onAddProduct}/>
                                 </React.Fragment>
                             ) : (

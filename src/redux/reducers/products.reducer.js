@@ -12,8 +12,10 @@ export default (state = initialState, action) => {
             };
 
         case "REMOVE_PRODUCT":
-            let found = false;
-            let _selectedProducts = state.selectedProducts.filter(x => found || !(found = x == action.payload));
+            let _selectedProducts = [...state.selectedProducts];
+            const index = _selectedProducts.findIndex(x => x._id == action.payload);
+            if (index > -1)
+                _selectedProducts.splice(index, 1);
 
             return {
                 ...state,

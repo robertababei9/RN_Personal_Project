@@ -1,7 +1,8 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef, useMemo } from 'react'
 import { StyleSheet, Text, View, FlatList, ActivityIndicator, SectionList, TouchableOpacity, Modal, Alert } from 'react-native';
+import { useSelector } from 'react-redux';
 
-import {Input} from '@src/components';
+import {Input, SearchBox} from '@src/components';
 import CategoryCard from './CategoryCard';
 import CategoryCircle from './CategoryCircle';
 
@@ -16,11 +17,13 @@ export default function Home(props) {
     const categoryListRef = useRef(null);
 
     const [searchValue, setSearchValue] = useState("");
-
+1
     const [categories, setCategories] = useState([]);
     const [sectionListData, setSectionListData] = useState([]);
     const [categoriesLoading, setCategoriesLoading] = useState(false);
     const [selectedSectionIndex, setSelectedSectionIndex] = useState(0);
+
+    const { selectedProducts } = useSelector(state => state.productsReducer);
 
     const [tempCategories, setTempCategories] = useState({
         categories: [],
@@ -86,7 +89,12 @@ export default function Home(props) {
 
 
     const renderSectionItem = ({item}) => {
-        return (<CategoryCard product={item} onClick={onCategoryItemClick}/>)
+        return (
+            <CategoryCard 
+                product={item} 
+                qty={ selectedProducts.filter(x => x._id == item._id).length }
+                onClick={() => onCategoryItemClick(item)}
+            />)
     }
 
     const renderSectionHeader = ({ section}) => {
@@ -114,6 +122,13 @@ export default function Home(props) {
     const renderHeader = () => {
         return (
             <View>
+                {/* <View style={styles.searchContainer}>
+                    <Text style={styles.searchText}>Search for food</Text>
+                    <Input style={styles.searchInput} value={searchValue} onChangeText={setSearchValue}/>
+                </View> */}
+
+                <SearchBox placeholder={"Search box"} value={searchValue} onChangeText={handleSearch}/>
+                
                 <TouchableOpacity onPress={() => props.navigation.navigate("AddCategory")}>
                     <Text style={styles.sectionHeaderAddText}>Add category</Text>
                 </TouchableOpacity>
@@ -121,8 +136,8 @@ export default function Home(props) {
         )
     }
 
-    const onCategoryItemClick = () => {
-        props.navigation.navigate('HomeInfo');
+    const onCategoryItemClick = (item) => {
+        props.navigation.navigate('HomeInfo', {item: item});
     }
 
     const getSectionOnScroll = ({viewableItems}) => {
@@ -154,7 +169,6 @@ export default function Home(props) {
             ))})
         });
 
-        console.log(search_sectionData)
         setSectionListData(search_sectionData);
     }
 
@@ -169,7 +183,7 @@ export default function Home(props) {
                     onPress: async () => {
                         const result = await CategoryAPI.Delete(sectionId) ;
                         if (result != true) return;
-                        
+
                         // API call to delete + refresh SectionList
                         const newSectionList = sectionListData.filter(section => section.id != sectionId);
                         const newCategoryIcons = categories.filter(category => category.id != sectionId);
@@ -187,7 +201,6 @@ export default function Home(props) {
         )
     }
 
-
     if (categoriesLoading) {
         return (
             <View style={{flex: 1, justifyContent: "center", alignItems: "center"}}>
@@ -198,10 +211,6 @@ export default function Home(props) {
 
     return (
         <View style={styles.container} >
-                <View style={styles.searchContainer}>
-                    <Text style={styles.searchText}>Search for food</Text>
-                    <Input style={styles.searchInput} value={searchValue} onChangeText={handleSearch}/>
-                </View>
 
                 {
                     searchValue == "" && (
@@ -222,7 +231,15 @@ export default function Home(props) {
                     sections={sectionListData}
                     renderItem={renderSectionItem}
                     renderSectionHeader={renderSectionHeader}
-                    ListHeaderComponent={renderHeader}
+                    ListHeaderComponent={
+                        <View>
+                            <SearchBox placeholder={"Search box"} value={searchValue} onChangeText={handleSearch}/>
+                            
+                            <TouchableOpacity onPress={() => props.navigation.navigate("AddCategory")}>
+                                <Text style={styles.sectionHeaderAddText}>Add category</Text>
+                            </TouchableOpacity>
+                        </View>
+                    }
                     keyExtractor={(item, index) => item + index}
                     onRefresh={fetchSectionListData}
                     refreshing={categoriesLoading}

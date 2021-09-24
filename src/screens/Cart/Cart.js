@@ -12,11 +12,19 @@ export default function Cart(props) {
         props.navigation.navigate("Home");
     }
 
+    const test = () => {
+        console.log(selectedProducts)
+    }
+
     return (
         <View style={styles.container}>
             {
                 selectedProducts.length > 0 ? (
-                    <Text>{selectedProducts.length} selected</Text>
+                    <View>
+                        <Text>{selectedProducts.length} selected</Text>
+                        {/* <Button style={styles.button} type="secondary" title="Press" onPress={test}/> */}
+
+                    </View>
                 ) : (
                     <View style={styles.empty}>
                         <Image style={styles.emptyBagImage} source={require('@src/assets/images/empty_bag.png')} resizeMode="cover"/>
