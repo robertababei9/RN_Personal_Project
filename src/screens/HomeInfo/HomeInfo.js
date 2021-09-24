@@ -53,8 +53,6 @@ export default function HomeInfo(props) {
         }
     }
 
-    console.log("___favoriteProducts: ", favoriteProducts);
-
 
     return (
         <View style={styles.container}>
@@ -62,7 +60,7 @@ export default function HomeInfo(props) {
 
             <View style={styles.bottomContainer}>
                 <View style={styles.bottomTextContainer}>
-                    <Text style={styles.title}>Buffalo Burger</Text>
+                    <Text style={styles.title}>{item.Name}</Text>
                     <Price price={item.Price} type="RON"/>
 
                     <Text style={styles.description}>{item.Description}</Text>
