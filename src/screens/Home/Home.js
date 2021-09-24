@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react'
 import { StyleSheet, Text, View, FlatList, ActivityIndicator, SectionList, TouchableOpacity, Modal, Alert } from 'react-native';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
 import {Input, SearchBox} from '@src/components';
 import CategoryCard from './CategoryCard';
 import CategoryCircle from './CategoryCircle';
 
-import { categoriesMockup, categories2 } from './config';
+import { getAllFavoriteProducts } from '@src/redux/actions/products.action';
 
 import CategoryAPI from '@src/api/CategoryAPI';
 
@@ -24,6 +24,7 @@ export default function Home(props) {
     const [selectedSectionIndex, setSelectedSectionIndex] = useState(0);
 
     const { selectedProducts } = useSelector(state => state.productsReducer);
+    const dispatch = useDispatch();
 
     const [tempCategories, setTempCategories] = useState({
         categories: [],
@@ -34,6 +35,7 @@ export default function Home(props) {
     // GET section list data
     useEffect(() => {
         fetchSectionListData();
+        dispatch(getAllFavoriteProducts())
     }, []);
 
     // when a section is focused ( is in wanted viewport)
@@ -127,7 +129,7 @@ export default function Home(props) {
                     <Input style={styles.searchInput} value={searchValue} onChangeText={setSearchValue}/>
                 </View> */}
 
-                <SearchBox placeholder={"Search box"} value={searchValue} onChangeText={handleSearch}/>
+                <SearchBox placeholder="Search food ..." value={searchValue} onChangeText={handleSearch}/>
                 
                 <TouchableOpacity onPress={() => props.navigation.navigate("AddCategory")}>
                     <Text style={styles.sectionHeaderAddText}>Add category</Text>
@@ -233,7 +235,7 @@ export default function Home(props) {
                     renderSectionHeader={renderSectionHeader}
                     ListHeaderComponent={
                         <View>
-                            <SearchBox placeholder={"Search box"} value={searchValue} onChangeText={handleSearch}/>
+                            <SearchBox placeholder="Search food ..." value={searchValue} onChangeText={handleSearch}/>
                             
                             <TouchableOpacity onPress={() => props.navigation.navigate("AddCategory")}>
                                 <Text style={styles.sectionHeaderAddText}>Add category</Text>

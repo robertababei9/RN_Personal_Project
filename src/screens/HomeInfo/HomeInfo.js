@@ -4,7 +4,7 @@ import Icon from 'react-native-vector-icons/AntDesign';
 import Icon2 from 'react-native-vector-icons/MaterialIcons';
 
 import { useSelector, useDispatch } from 'react-redux';
-import { addProduct, removeProduct } from '@src/redux/actions/products.action';
+import { addProduct, removeProduct, addToFavorite, removeFromFavorite } from '@src/redux/actions/products.action';
 
 import { Price } from '@src/components';
 import EmptyFoodImage from "@src/assets/images/empty_food_image.png";
@@ -26,25 +26,35 @@ const ActionCardButton = ({type = "plus", style = {},  onPress}) => {
 
 export default function HomeInfo(props) {
 
-    const [favorite, setFavorite] = useState(false);
     const item = props.route.params.item;
 
-    const { selectedProducts } = useSelector(state => state.productsReducer);
+    const { selectedProducts, favoriteProducts } = useSelector(state => state.productsReducer);
     const dispatch = useDispatch();
 
-    const onAddProduct = () => {
-        // setNoProducts(prev => prev + 1)
+    const favorite = useMemo(() => favoriteProducts.find(x => x.productId == item._id), [favoriteProducts])
+    const nrOfProducts = useMemo(() => selectedProducts.filter(x => x._id == item._id).length, [selectedProducts]);
 
+    const onAddProduct = () => {
         dispatch(addProduct(item));
     };
 
     const onRemoveProduct = () => {
-        // setNoProducts(prev => prev - 1);
-
         dispatch(removeProduct(item._id));
     }
 
-    const nrOfProducts = useMemo(() => selectedProducts.filter(x => x._id == item._id).length, [selectedProducts]);
+    const handleSaveToFavorite = () => {
+        if (favorite) {
+            // remove from favorite
+            dispatch(removeFromFavorite(favorite.id))
+        }
+        else {
+            // add to favorite
+            dispatch(addToFavorite(item._id));
+        }
+    }
+
+    console.log("___favoriteProducts: ", favoriteProducts);
+
 
     return (
         <View style={styles.container}>
@@ -53,13 +63,13 @@ export default function HomeInfo(props) {
             <View style={styles.bottomContainer}>
                 <View style={styles.bottomTextContainer}>
                     <Text style={styles.title}>Buffalo Burger</Text>
-                    <Price price={47.99} type="RON"/>
+                    <Price price={item.Price} type="RON"/>
 
                     <Text style={styles.description}>{item.Description}</Text>
                 </View>
                 
                 <View style={styles.bottomActionsCotainer}>
-                    <TouchableOpacity onPress={() => setFavorite(prev => !prev)}>
+                    <TouchableOpacity onPress={handleSaveToFavorite}>
                         {
                             favorite ? (
                                 <Icon name="heart" size={40} color="#FF4C29" />

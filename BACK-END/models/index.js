@@ -8,6 +8,7 @@ db.user = require("./user.model");
 db.role = require("./role.model");
 db.category = require("./category.model");
 db.subcategory = require("./subcategory.model");
+db.favoriteSubcategory = require("./favoriteSubcategory.model");
 
 db.ROLES = ["user", "admin"];
 

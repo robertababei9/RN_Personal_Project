@@ -1,6 +1,7 @@
 
 const initialState = {
-    selectedProducts: []
+    selectedProducts: [],
+    favoriteProducts: [],
 };
 
 export default (state = initialState, action) => {
@@ -21,7 +22,18 @@ export default (state = initialState, action) => {
                 ...state,
                 selectedProducts: _selectedProducts
             }
+        case "ADD_TO_FAVORITE":
+            const model = {
+                id: action.payload._id,
+                productId: action.payload.SubcategoryId
+            }
+            return {...state, favoriteProducts: [...state.favoriteProducts, model]}
+        
+        case "GET_ALL_FAVORITES":
+            return {...state, favoriteProducts: action.payload}
 
+        case "DELETE_FAVORITE":
+            return {...state, favoriteProducts: state.favoriteProducts.filter(x => x.id != action.payload)}
         default:
             return state;
     }
