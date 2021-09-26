@@ -18,7 +18,7 @@ const ActionCardButton = ({type = "plus", style = {},  onPress}) => {
     )
 }
 
-export default function CategoryCard({product, qty = 0, onClick}) {
+export default function CategoryCard({product, onClick}) {
 
     const {_id, Name, iconName, Description, Price } = product;
 
@@ -37,7 +37,7 @@ export default function CategoryCard({product, qty = 0, onClick}) {
     const nrOfProducts = useMemo(() => selectedProducts.filter(x => x._id == product._id).length, [selectedProducts]);
     
     return (
-        <TouchableOpacity onPress={onClick} style={styles.categoryCard}>
+        <TouchableOpacity onPress={() => onClick && onClick()} style={styles.categoryCard}>
             <View style={styles.pictureContainer} > 
                 <Icon name="fastfood" size={72} color="#FF4C29" />
             </View>

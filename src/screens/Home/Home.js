@@ -2,8 +2,8 @@ import React, { useState, useEffect, useRef, useMemo } from 'react'
 import { StyleSheet, Text, View, FlatList, ActivityIndicator, SectionList, TouchableOpacity, Modal, Alert } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 
-import {Input, SearchBox} from '@src/components';
-import CategoryCard from './CategoryCard';
+import {CategoryCard, SearchBox} from '@src/components';
+// import CategoryCard from './CategoryCard';
 import CategoryCircle from './CategoryCircle';
 
 import { getAllFavoriteProducts } from '@src/redux/actions/products.action';
@@ -94,7 +94,6 @@ export default function Home(props) {
         return (
             <CategoryCard 
                 product={item} 
-                qty={ selectedProducts.filter(x => x._id == item._id).length }
                 onClick={() => onCategoryItemClick(item)}
             />)
     }
@@ -116,24 +115,6 @@ export default function Home(props) {
                         <Text style={styles.sectionHeaderAddText}>Delete</Text>
                     </TouchableOpacity>
                 </View>
-            </View>
-        )
-    }
-
-    /// admin panel - render section header
-    const renderHeader = () => {
-        return (
-            <View>
-                {/* <View style={styles.searchContainer}>
-                    <Text style={styles.searchText}>Search for food</Text>
-                    <Input style={styles.searchInput} value={searchValue} onChangeText={setSearchValue}/>
-                </View> */}
-
-                <SearchBox placeholder="Search food ..." value={searchValue} onChangeText={handleSearch}/>
-                
-                <TouchableOpacity onPress={() => props.navigation.navigate("AddCategory")}>
-                    <Text style={styles.sectionHeaderAddText}>Add category</Text>
-                </TouchableOpacity>
             </View>
         )
     }

@@ -6,11 +6,11 @@ export default function Price({price, type = ""}) {
     const renderText = () => {
         switch (type.toUpperCase()) {
             case "RON":
-                return (<Text style={styles.price}>{price} RON</Text>);
+                return (<Text style={styles.price}>{price.toFixed(2)} RON</Text>);
             case "EUR":
-                return (<Text style={styles.price}>€ {price}</Text>);
+                return (<Text style={styles.price}>€ {price.toFixed(2)}</Text>);
             case "USD":
-                return (<Text style={styles.price}>$ {price}</Text>);
+                return (<Text style={styles.price}>$ {price.toFixed(2)}</Text>);
             default:
                 return (<Text style={styles.price}>{price}</Text>);
         }
